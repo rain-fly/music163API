@@ -49,6 +49,9 @@ public class MusicController  {
         System.out.println("读取core文件长度："+new File(resourcePath+"core.js").length());
         engine.eval(new FileReader(new File(resourcePath+"crypto-js.js")));
         engine.eval(new FileReader(new File(resourcePath+"core.js")));
+        engine.eval(new FileReader(new File(resourcePath+"Barrett.js")));
+        engine.eval(new FileReader(new File(resourcePath+"BigInt.js")));
+        engine.eval(new FileReader(new File(resourcePath+"RSA.js")));
         Invocable invocable = (Invocable) engine;
 
         //执行js函数
