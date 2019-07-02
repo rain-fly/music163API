@@ -1,3 +1,4 @@
+
 var  emj = {
     "色": "00e0b",
     "流感": "509f6",
@@ -293,18 +294,6 @@ var CryptoJS = CryptoJS ||
 // costToCode(md);
 // costToCode(["爱心", "女孩", "惊恐", "大笑"]);
 
-getRouteInfo("66476");
-function getRouteInfo(id){
-    var obj_json =  {
-        ids: "["+id+"]",
-        level: "standard",
-        encodeType: "aac",
-        csrf_token: ""
-    }
-   // console.log( d(JSON.stringify(obj_json),  costToCode(["流泪", "强"]),  costToCode(md),    costToCode(["爱心", "女孩", "惊恐", "大笑"])))
-    return  d(JSON.stringify(obj_json),  costToCode(["流泪", "强"]),  costToCode(md),    costToCode(["爱心", "女孩", "惊恐", "大笑"]));
-}
-
 
 
 
@@ -327,43 +316,6 @@ function costToCode(arr){
 
 
 
-function a(a) {
-    var d, e, b = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", c = "";
-    for (d = 0; a > d; d += 1)
-        e = Math.random() * b.length,
-            e = Math.floor(e),
-            c += b.charAt(e);
-    return c
-}
-function b(a, b) {
-    var c = CryptoJS.enc.Utf8.parse(b)
-        , d = CryptoJS.enc.Utf8.parse("0102030405060708")
-        , e = CryptoJS.enc.Utf8.parse(a)
-        , f = CryptoJS.AES.encrypt(e, c, {
-        iv: d,
-        mode: CryptoJS.mode.CBC
-    });
-    return f.toString()
-}
-function c(a, b, c) {
-    var d, e;
-    return setMaxDigits(131),
-        d = new RSAKeyPair(b,"",c),
-        e = encryptedString(d, a)
-}
-function d(d, e, f, g) {
-    var h = {}
-        , i = a(16);
-    return h.encText = b(d, g),
-        h.encText = b(h.encText, i),
-        h.encSecKey = c(i, e, f),
-        h
-}
-function e(a, b, d, e) {
-    var f = {};
-    return f.encText = c(a + e, b, d),
-        f
-}
 
 
 
@@ -375,6 +327,7 @@ function RSAKeyPair(a, b, c) {
         this.radix = 16,
         this.barrett = new BarrettMu(this.m)
 }
+
 function twoDigit(a) {
     return (10 > a ? "0": "") + String(a)
 }
@@ -694,4 +647,57 @@ function BarrettMu_powMod(a, b) {
         d = this.multiplyMod(d, d)
     }
     return c
+}
+
+
+function getRouteInfo(id){
+    var  obj_json =  {
+        ids: "["+id+"]",
+        level: "standard",
+        encodeType: "aac",
+        csrf_token: ""
+    }
+    // console.log( d(JSON.stringify(obj_json),  costToCode(["流泪", "强"]),  costToCode(md),    costToCode(["爱心", "女孩", "惊恐", "大笑"])))
+    return  d(JSON.stringify(obj_json),  costToCode(["流泪", "强"]),  costToCode(md),    costToCode(["爱心", "女孩", "惊恐", "大笑"]));
+}
+//得到a位随机数
+function a(a) {
+    var d, e, b = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", c = "";
+    for (d = 0; a > d; d += 1)
+        e = Math.random() * b.length,
+            e = Math.floor(e),
+            c += b.charAt(e);
+    return c
+}
+// AES加密，iv为0102030405060708     a密文  b是密钥
+function b(a, b) {
+    var c = CryptoJS.enc.Utf8.parse(b)  //c /  b加密秘钥
+        , d = CryptoJS.enc.Utf8.parse("0102030405060708")  //d  //  矢量
+        , e = CryptoJS.enc.Utf8.parse(a)  // e  a密文
+        , f = CryptoJS.AES.encrypt(e, c, {   //  AES加密   f AES加密结果
+        iv: d,
+        mode: CryptoJS.mode.CBC
+    });
+    return f.toString()
+}
+//	RSA加密
+function c(a, b, c) {
+    var d, e;
+    return setMaxDigits(131),
+        d = new RSAKeyPair(b,"",c),
+        e = encryptedString(d, a)  //d 密文 a密钥
+}
+
+
+function d(d, e, f, g) {  //参数1 是变量json  参数2 参数3 参数4都是常量
+    var h = {}, i = a(16);
+    return h.encText = b(d, g),
+        h.encText = b(h.encText, i),
+        h.encSecKey = c(i, e, f),
+        h
+}
+function e(a, b, d, e) {
+    var f = {};
+    return f.encText = c(a + e, b, d),
+        f
 }
