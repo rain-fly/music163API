@@ -1,7 +1,11 @@
 package com.rainfly.musicapi.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.rainfly.musicapi.entity.RequestEntity;
+import com.rainfly.musicapi.util.CryptoUtils;
 import com.rainfly.musicapi.util.HttpClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,4 +76,30 @@ public class MusicController  {
         }
          return list;
      }
+
+    @RequestMapping("/getSongList2")
+    List<String> getSongList2(String[] songId) throws Exception {
+        RequestEntity requestEntity = new RequestEntity();
+       // String[] ids = {"330706"};
+        requestEntity.setIds(songId);
+        requestEntity.setLevel("standard");
+        requestEntity.setEncodeType("aac");
+        requestEntity.setCsrf_token("");
+        String strJson=JSON.toJSONString(requestEntity);
+        CryptoUtils cryptoUtils = new CryptoUtils();
+        Map<String,String>  map =  cryptoUtils.Encrypt(strJson);
+        String url = "https://music.163.com/weapi/song/enhance/player/url/v1";
+        String jsonRetrun ="";
+        jsonRetrun = HttpClient.send(url, map,"utf-8");
+        System.out.println("请求网易云返回的数据：***************"+jsonRetrun+"**********************");
+        JsonParser jsonParser  = new JsonParser();
+        JsonObject jsonObject = (JsonObject) jsonParser.parse(jsonRetrun);
+        List<String>  list =  new ArrayList<>();
+        for (int i = 0;i<songId.length;i++){
+            String location = String.valueOf(jsonObject.get("data").getAsJsonArray().get(i).getAsJsonObject().get("url")).replace("\"","");
+            list.add(location);
+        }
+        return list;
+
+    }
 }

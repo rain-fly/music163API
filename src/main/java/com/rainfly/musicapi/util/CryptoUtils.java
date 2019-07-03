@@ -40,7 +40,8 @@ public class CryptoUtils {
             int pos = (int) Math.floor(Math.random() * keys.length());
             key.append(pos);
         }
-        return key.toString();
+      //  return key.toString();
+        return "I0LKIkkMSKqL2fQG";
     }
 
     /**
@@ -123,7 +124,7 @@ public class CryptoUtils {
      * @throws Exception 异常
      */
     public Map<String,String> Encrypt(String json) throws Exception {
-        String secKey = createSecretKey(16);
+      String secKey = createSecretKey(16);
         String encText = aesEncrypt(aesEncrypt(json,NONCE),secKey);
         String encSecKey = rsaEncrypt(secKey,pubKey,modules);
         Map<String,String> result = new HashMap<>();
