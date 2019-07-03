@@ -1,10 +1,9 @@
 package com.rainfly.musicapi.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.rainfly.musicapi.entity.RequestEntity;
+import com.rainfly.musicapi.entity.SongMP3Entity;
 import com.rainfly.musicapi.util.CryptoUtils;
 import com.rainfly.musicapi.util.HttpClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -79,7 +78,7 @@ public class MusicController  {
 
     @RequestMapping("/getSongList2")
     List<String> getSongList2(String[] songId) throws Exception {
-        RequestEntity requestEntity = new RequestEntity();
+        SongMP3Entity requestEntity = new SongMP3Entity();
        // String[] ids = {"330706"};
         requestEntity.setIds(songId);
         requestEntity.setLevel("standard");
@@ -102,4 +101,6 @@ public class MusicController  {
         return list;
 
     }
+
+
 }

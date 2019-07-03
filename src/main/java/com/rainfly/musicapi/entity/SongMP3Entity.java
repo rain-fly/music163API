@@ -1,6 +1,9 @@
 package com.rainfly.musicapi.entity;
 
-public class RequestEntity {
+/**
+ 网易云音乐 MP3资源接口 JSON实体
+ **/
+public class SongMP3Entity {
 
    private String[] ids;
    private String level;
