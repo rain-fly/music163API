@@ -33,19 +33,19 @@ public class MusicController  {
 
     @RequestMapping("/getSongList")
     List<String> getSongList(String[] songId) throws Exception{
+
         SongMP3Entity requestEntity = new SongMP3Entity();
-        // String[] ids = {"330706"};
         requestEntity.setIds(songId);
         requestEntity.setLevel("standard");
         requestEntity.setEncodeType("aac");
         requestEntity.setCsrf_token("");
         String strJson=JSON.toJSONString(requestEntity);
+
         CryptoUtils cryptoUtils = new CryptoUtils();
         Map<String,String>  map =  cryptoUtils.Encrypt(strJson);
         String url = "https://music.163.com/weapi/song/enhance/player/url/v1";
         String jsonRetrun ="";
         jsonRetrun = HttpClient.send(url, map,"utf-8");
-        System.out.println("请求网易云返回的数据：***************"+jsonRetrun+"**********************");
         JsonParser jsonParser  = new JsonParser();
         JsonObject jsonObject = (JsonObject) jsonParser.parse(jsonRetrun);
         List<String>  list =  new ArrayList<>();
