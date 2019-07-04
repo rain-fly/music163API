@@ -3,7 +3,8 @@ package com.rainfly.musicapi.controller;
 import com.alibaba.fastjson.JSON;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.rainfly.musicapi.entity.SongMP3Entity;
+import com.rainfly.musicapi.entity.WySongLyric;
+import com.rainfly.musicapi.entity.WySongUrl;
 import com.rainfly.musicapi.util.CryptoUtils;
 import com.rainfly.musicapi.util.HttpClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,15 +32,20 @@ public class MusicController  {
     @Value("${path.resourcePath}")
     private  String resourcePath;
 
-    @RequestMapping("/getSongList")
-    List<String> getSongList(String[] songId) throws Exception{
-
-        SongMP3Entity requestEntity = new SongMP3Entity();
-        requestEntity.setIds(songId);
-        requestEntity.setLevel("standard");
-        requestEntity.setEncodeType("aac");
-        requestEntity.setCsrf_token("");
-        String strJson=JSON.toJSONString(requestEntity);
+    /**
+    * @Description: get 163music source location URL
+    * @Author: diaoyufei
+    * @Date: 2019/7/4 0004
+    * @Time: 13:07
+    */
+    @RequestMapping("/getWySongUrl")
+    List<String> getWySongUrl(String[] songId) throws Exception{
+        WySongUrl wySongUrl = new WySongUrl();
+        wySongUrl.setIds(songId);
+        wySongUrl.setLevel("standard");
+        wySongUrl.setEncodeType("aac");
+        wySongUrl.setCsrf_token("");
+        String strJson=JSON.toJSONString(wySongUrl);
 
         CryptoUtils cryptoUtils = new CryptoUtils();
         Map<String,String>  map =  cryptoUtils.Encrypt(strJson);
@@ -56,5 +62,46 @@ public class MusicController  {
         return list;
      }
 
+    /**
+     * @Description: get 163music source  lyric
+     * @Author: diaoyufei
+     * @Date: 2019/7/4 0004
+     * @Time: 13:07
+     */
+    @RequestMapping("/getWySongLyric")
+    String getWySongLyric(String songId) throws Exception{
+        WySongLyric wySongLyric = new WySongLyric();
+        wySongLyric.setId(songId);
+        wySongLyric.setCsrf_token("");
+        String strJson=JSON.toJSONString(wySongLyric);
+
+        CryptoUtils cryptoUtils = new CryptoUtils();
+        Map<String,String>  map =  cryptoUtils.Encrypt(strJson);
+        String url = "https://music.163.com/weapi/song/lyric";
+        String jsonRetrun ="";
+        jsonRetrun = HttpClient.send(url, map,"utf-8");
+        JsonParser jsonParser  = new JsonParser();
+        JsonObject jsonObject = (JsonObject) jsonParser.parse(jsonRetrun);
+        String lyric = String.valueOf(jsonObject.get("lrc").getAsJsonObject().get("lyric")).replace("\"","");
+        return lyric;
+    }
+    
+    
+    /** 
+    * @Description: get Wy163 Song Detail Contet
+    * @Author: diaoyufei
+    * @Date: 2019/7/4 0004 
+    * @Time: 13:41
+    */
+    @RequestMapping("/getWySongDetail")
+    String getWySongDetail(String songId) throws Exception{
+        String url = "https://music.163.com/api/song/detail/?ids=%5B"+songId+"%5D";
+        String jsonRetrun ="";
+        jsonRetrun = HttpClient.send(url, null,"utf-8");
+        JsonParser jsonParser  = new JsonParser();
+        JsonObject jsonObject = (JsonObject) jsonParser.parse(jsonRetrun);
+     //   String lyric = String.valueOf(jsonObject.get("lrc").getAsJsonObject().get("lyric")).replace("\"","");
+        return jsonRetrun;
+    }
 
 }

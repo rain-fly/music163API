@@ -1,9 +1,12 @@
 package com.rainfly.musicapi.entity;
 
-/**
- 网易云音乐 MP3资源接口 JSON实体
- **/
-public class SongMP3Entity {
+/** 
+* @Description: requset resouces url JSON mapping of entity  
+* @Author: diaoyufei
+* @Date: 2019/7/4 0004 
+* @Time: 13:10
+*/ 
+public class WySongUrl {
 
    private String[] ids;
    private String level;
