@@ -4,6 +4,7 @@ import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.HexUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.log4j.Logger;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -27,6 +28,7 @@ public class CryptoUtils {
     //向量iv
     private static final String ivCode = "0102030405060708";
 
+    static Logger log = Logger.getLogger(CryptoUtils.class);
     /**
      * AES随机生成秘钥
      * @param size 长度
